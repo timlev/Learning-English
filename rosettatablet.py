@@ -589,7 +589,10 @@ def lessonmenu(unit):
 	screen.fill(background_colour)
 	mysmallfont = pg.font.Font(font, 40)
 	listoffolders = [f for f in listdir("./"+unit) if isfile(join("./"+unit,f)) == False]
-	listoffolders.remove("examplelesson") #remove blank lesson from menu
+	try:
+		listoffolders.remove("examplelesson") #remove blank lesson from menu
+	except:
+		pass
 	listoffolderlables = [screen.blit(mysmallfont.render(str(listoffolders.index(folder)+1)+". "+folder.title(), 1, black),[20,45*listoffolders.index(folder)]) for folder in listoffolders]
 	#drawquitbutton()
 	drawmenubutton()
