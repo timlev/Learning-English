@@ -1,0 +1,23 @@
+RosettaTablet
+
+I. What is it?
+
+Rosetta Tablet is a free, customizable, visual language-learning platform geared toward beginning, pre-literate or semi-literate students. Teachers can easily create new lessons by saving pictures to a lesson folder. Rosetta Tablet displays the picture's name as it is written, and plays a recording of the picture's name. Students then must click on the picture that matches the text and audio. The program advances through the folder and displays a score at the end.
+
+II. Who made it?
+
+The program was made by Tim Leverentz, an ESL Teacher at the Roseville Adult Learning Center in Roseville, MN.
+
+III. How can I add new pictures, lessons, and units?
+
+Pictures, lessons, and units are organized in folders within the program folder. A lesson folder must contain a 'pics' folder and a 'sounds' folder. Pictures can be downloaded from cameras, scanned pages, or web pages into the pics folder of a lesson. When the program starts, it automatically downloads a recording of the pictures' names as read by an online text-to-speech service to the 'sounds' folder of the same lesson. A teacher can modify or replace the automated recording by editing the file in the 'sounds' folder if they so choose. 
+
+The pictures must be housed within a lesson folder within a unit folder within the RosettaTablet program folder as shown below:
+
+RosettaTablet folder > Unit folder > Lesson folder > pics & sounds folders
+
+IV. Why did you write this program?
+
+I was unhappy with the high price of commercial language-learning programs and sites and their lack of customizability. They seemed to be designed for students who were literate in computer skills and their home language. They were not user-friendly enough for pre-literate and semi-literate students with little or no experience with computers. The user interfaces were too cluttered or had too small of print for people who had little experience with print or people who had less than perfect vision.
+
+I wanted to make a tool that could be customized by creative teachers to focus on their students' specific needs. I wanted to give teachers another tool to deliver comprehensible input through clear pictures and audio at a pacing of students' choosing.
