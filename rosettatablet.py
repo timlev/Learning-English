@@ -330,13 +330,15 @@ def displayactivitychoice():
     label1 = mysmallfont.render("Listen", 2, black)
     label2 = mysmallfont.render("Say", 2, black)
     label3 = mysmallfont.render("Read", 2, black)
-    listenlabel = screen.blit(label1,[200,(h/2)-100])
-    saylabel = screen.blit(label2,[w-200,(h/2)-100])
-    readlabel = screen.blit(label3,[w/2-200,(h/2)-100])
-    drawmainbutton(200,h/2)
-    drawpronunciationbutton(w-200,h/2)
-    drawreadbutton(w/2-200,h/2)
-    #drawquitbutton()
+    listen_width, listen_height = 100, h/2
+    say_width, say_height = listen_width + 300, h/2
+    read_width, read_height = say_width + 200, h/2
+    listenlabel = screen.blit(label1,[listen_width,listen_height-100])
+    saylabel = screen.blit(label2,[say_width,listen_height-100])
+    readlabel = screen.blit(label3,[read_width,listen_height-100])
+    drawmainbutton(listen_width,h/2)
+    drawpronunciationbutton(say_width,h/2)
+    drawreadbutton(read_width,h/2)
     drawmenubutton()
     pg.display.flip()
     looping = True
