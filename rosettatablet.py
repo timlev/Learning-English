@@ -492,7 +492,8 @@ def pronunciationpractice(lesson):
                         drawpronunciationbutton(w-200,h/2)
                         pg.display.update()
                         pg.mixer.music.play(0)
-                        pg.time.wait(1000)
+                        while pg.mixer.music.get_busy():
+                            pg.time.wait(10)
                         try:
                             playinput()
                         except:
@@ -502,6 +503,8 @@ def pronunciationpractice(lesson):
                     if quitbutton.collidepoint(pos):
                         raise SystemExit
                     if nextbutton.collidepoint(pos):
+                        while pg.mixer.music.get_busy():
+                            pg.time.wait(10)
                         looping = False
                         break
 def mainlesson(lesson):
@@ -588,6 +591,8 @@ def mainlesson(lesson):
                         pg.display.flip()
                         missed.append(word_display)
                         wrong_sound.play()
+                        while pg.mixer.get_busy():
+                            pg.time.wait(10)
                         pg.mixer.music.play(0)
                         trycount += 1
                     #Right answer is clicked
@@ -709,6 +714,8 @@ def text_only_lesson(lesson):
                         pg.display.flip()
                         missed.append(word_display)
                         wrong_sound.play()
+                        while pg.mixer.get_busy():
+                            pg.time.wait(10)
                         pg.mixer.music.play(0)
                         trycount += 1
                     #Right answer is clicked
