@@ -734,6 +734,7 @@ def text_only_lesson(lesson):
                         pg.mixer.music.play(0)
                         while pg.mixer.music.get_busy():
                             pg.time.wait(10)
+                        pg.time.wait(2000)
                         looping = False
                         break
                     elif menubutton.collidepoint(pos):
