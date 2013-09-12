@@ -330,7 +330,6 @@ def displayactivitychoice():
     label1 = mysmallfont.render("Listen", 2, black)
     label2 = mysmallfont.render("Say", 2, black)
     label3 = mysmallfont.render("Read", 2, black)
-<<<<<<< HEAD
     listenlabel = screen.blit(label1,[200,(h/2)-100])
     saylabel = screen.blit(label2,[w-200,(h/2)-100])
     readlabel = screen.blit(label3,[w/2-200,(h/2)-100])
@@ -338,17 +337,6 @@ def displayactivitychoice():
     drawpronunciationbutton(w-200,h/2)
     drawreadbutton(w/2-200,h/2)
     #drawquitbutton()
-=======
-    listen_width, listen_height = 100, h/2
-    say_width, say_height = listen_width + 300, h/2
-    read_width, read_height = say_width + 200, h/2
-    listenlabel = screen.blit(label1,[listen_width,listen_height-100])
-    saylabel = screen.blit(label2,[say_width,listen_height-100])
-    readlabel = screen.blit(label3,[read_width,listen_height-100])
-    drawmainbutton(listen_width,h/2)
-    drawpronunciationbutton(say_width,h/2)
-    drawreadbutton(read_width,h/2)
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
     drawmenubutton()
     pg.display.flip()
     looping = True
@@ -504,12 +492,7 @@ def pronunciationpractice(lesson):
                         drawpronunciationbutton(w-200,h/2)
                         pg.display.update()
                         pg.mixer.music.play(0)
-<<<<<<< HEAD
                         pg.time.wait(1000)
-=======
-                        while pg.mixer.music.get_busy():
-                            pg.time.wait(10)
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
                         try:
                             playinput()
                         except:
@@ -519,11 +502,6 @@ def pronunciationpractice(lesson):
                     if quitbutton.collidepoint(pos):
                         raise SystemExit
                     if nextbutton.collidepoint(pos):
-<<<<<<< HEAD
-=======
-                        while pg.mixer.music.get_busy():
-                            pg.time.wait(10)
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
                         looping = False
                         break
 def mainlesson(lesson):
@@ -610,11 +588,6 @@ def mainlesson(lesson):
                         pg.display.flip()
                         missed.append(word_display)
                         wrong_sound.play()
-<<<<<<< HEAD
-=======
-                        while pg.mixer.get_busy():
-                            pg.time.wait(10)
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
                         pg.mixer.music.play(0)
                         trycount += 1
                     #Right answer is clicked
@@ -631,10 +604,7 @@ def mainlesson(lesson):
                         pg.mixer.music.play(0)
                         while pg.mixer.music.get_busy():
                             pg.time.wait(10)
-<<<<<<< HEAD
                         pg.time.wait(2000)
-=======
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
                         looping = False
                         break
                     elif menubutton.collidepoint(pos):
@@ -740,11 +710,6 @@ def text_only_lesson(lesson):
                         pg.display.flip()
                         missed.append(word_display)
                         wrong_sound.play()
-<<<<<<< HEAD
-=======
-                        while pg.mixer.get_busy():
-                            pg.time.wait(10)
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
                         pg.mixer.music.play(0)
                         trycount += 1
                     #Right answer is clicked
@@ -761,10 +726,6 @@ def text_only_lesson(lesson):
                         pg.mixer.music.play(0)
                         while pg.mixer.music.get_busy():
                             pg.time.wait(10)
-<<<<<<< HEAD
-=======
-                        pg.time.wait(2000)
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
                         looping = False
                         break
                     elif menubutton.collidepoint(pos):
@@ -797,10 +758,7 @@ def displayscore(lesson):
     for box in boxtexts:
         dist = (w/4)*(boxtexts.index(box))
         screen.blit(box, [dist+10,100])
-<<<<<<< HEAD
     chooselessonpic = pg.image.load("next.png").convert_alpha()
-=======
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
     chooselessonbuttontext = mysmallfont.render("Choose a lesson", 2, black)
     chooselessonbuttonbox = pg.draw.rect(screen,gray,((w/2)-(chooselessonbuttontext.get_rect()[2]/2)-3,h-200-3,chooselessonbuttontext.get_width()+6,chooselessonbuttontext.get_height()+6),0)
     chooselessonbutton = screen.blit(chooselessonbuttontext, [(w/2)-(chooselessonbuttontext.get_rect()[2]/2),h-200])
@@ -810,10 +768,7 @@ def displayscore(lesson):
     repeatpic = pg.image.load("repeat.png").convert_alpha()
     pencilpic = pg.image.load("pencil.png").convert_alpha()
     screen.blit(pencilpic, [w/2,h/2])
-<<<<<<< HEAD
     nex = screen.blit(chooselessonpic, [chooselessonbuttonbox[0]-75,chooselessonbuttonbox[1]-3])
-=======
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
     rep = screen.blit(repeatpic, [repeatlessonbuttonbox[0]-75,repeatlessonbuttonbox[1]-3])
     drawquitbutton()
     pg.display.flip()
@@ -831,11 +786,7 @@ def displayscore(lesson):
                 if repeatlessonbuttonbox.collidepoint(pos) or rep.collidepoint(pos):
                     mainlesson(lesson)
                     displayscore(lesson)
-<<<<<<< HEAD
                 if chooselessonbuttonbox.collidepoint(pos) or nex.collidepoint(pos):
-=======
-                if chooselessonbuttonbox.collidepoint(pos):
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
                     looping = False
                     break
                 
@@ -853,18 +804,7 @@ def unitmenu():
     global unit
     uniton = True
     screen.fill(background_colour)
-<<<<<<< HEAD
     listoffolders = [f for f in listdir("./") if isfile(join("./",f)) == False and f not in ["examplelesson","exampleunit","Test","RosettaTablet.app"]]
-=======
-    listoffolders = [f for f in listdir("./") if isfile(join("./",f)) == False]
-    try:
-        listoffolders.remove("examplelesson") #remove blank lesson from menu
-        listoffolders.remove("exampleunit")
-        listoffolders.remove("Test")
-        listoffolders.remove("RosettaTablet.app")
-    except:
-        pass
->>>>>>> 40ee15a97937f85055640b5297c638b747a55d76
     listoffolderlables = [screen.blit(mysmallfont.render(str(listoffolders.index(folder)+1)+". "+folder.title(), 1, black),[20,45*listoffolders.index(folder)]) for folder in listoffolders]
     drawquitbutton()
     pg.display.flip()
