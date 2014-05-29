@@ -119,11 +119,13 @@ trycount = 0
 original_length = 0
 completeddict = {}
 buttonresult = False
+
 # create the basic window/screen and a title/caption
+#screen = pg.display.set_mode((0,0), pg.FULLSCREEN, 0) #full sized window mode pg.FULLSCREEN
+screen = pg.display.set_mode((0,0), pg.FULLSCREEN, 0)
 icon = pg.image.load("headphones_globe.png")
 pg.display.set_icon(icon)
 
-screen = pg.display.set_mode((0,0)) #full sized window mode pg.FULLSCREEN
 screen.fill(background_colour)
 size = screen.get_size()
 w = size[0]
@@ -498,7 +500,7 @@ def drawnextbutton():
 
 def drawlessonstructure():
     global choicebox1, choicebox2, choicebox3,choicebox4, soundbutton, label
-    screen = pg.display.set_mode((0,0)) #full sized window mode
+    screen = pg.display.set_mode((0,0), pg.FULLSCREEN, 0) #full sized window mode
     screen.fill(background_colour)
     size = screen.get_size()
     w = size[0]
@@ -513,10 +515,10 @@ def drawlessonstructure():
     scoreYpos = quitbuttonbox[3]
     screen.blit(scorelabel,[scoreXpos,scoreYpos])
     titlebox = pg.draw.rect(screen, black, (0,0,w,100), 3)
-    choicebox1 = pg.draw.rect(screen, black, (0,100,(w)/2,(h-200)/2), 3)
-    choicebox2 = pg.draw.rect(screen, black, (w/2,100,(w)/2,(h-200)/2), 3)
-    choicebox3 = pg.draw.rect(screen, black, (0,((h-200)/2)+100,(w)/2,(h-200)/2), 3)
-    choicebox4 = pg.draw.rect(screen, black, (w/2,((h-200)/2)+100,(w)/2,(h-200)/2), 3)
+    choicebox1 = pg.draw.rect(screen, black, (0,100,(w)/2,(h-100)/2), 3)
+    choicebox2 = pg.draw.rect(screen, black, (w/2,100,(w)/2,(h-100)/2), 3)
+    choicebox3 = pg.draw.rect(screen, black, (0,((h-100)/2)+100,(w)/2,(h-100)/2), 3)
+    choicebox4 = pg.draw.rect(screen, black, (w/2,((h-100)/2)+100,(w)/2,(h-100)/2), 3)
     soundpic = pg.image.load('sound.png')
     soundbutton = screen.blit(soundpic, (0,0))
     pg.display.flip()
@@ -898,7 +900,7 @@ def displayscore(lesson):
 #display Lessons Menu
 def unitmenu():
     global completeddict, buttonresult
-    screen = pg.display.set_mode((0,0)) #full sized window mode
+    screen = pg.display.set_mode((0,0), pg.FULLSCREEN, 0) #full sized window mode
     screen.fill(background_colour)
     size = screen.get_size()
     w = size[0]
@@ -936,7 +938,7 @@ def spell(lesson):
     fontsize = 120
     mysmallfont = pg.font.Font('DidactGothic.ttf',fontsize)
     mysmallerfont = pg.font.Font('DidactGothic.ttf',60)
-    screen = pg.display.set_mode((0,0)) #full sized window mode
+    screen = pg.display.set_mode((0,0), pg.FULLSCREEN, 0) #full sized window mode
     screen.fill(background_colour)
     size = screen.get_size()
     w = size[0]
@@ -1109,7 +1111,7 @@ def spell(lesson):
 
 def lessonmenu(unit):
     global completeddict, buttonresult,lessonon
-    screen = pg.display.set_mode((0,0)) #full sized window mode
+    screen = pg.display.set_mode((0,0), pg.FULLSCREEN, 0) #full sized window mode
     screen.fill(background_colour)
     size = screen.get_size()
     w = size[0]
