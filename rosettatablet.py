@@ -30,8 +30,8 @@ dict_sounds_path = "./sounds/"
 
 #replacementsdict = {'.exclamationmark': '!', '.apostrophe': "'", '.questionmark': '?', '.comma': ',', '.colon': ':'}
 
-picfiles = [os.path.abspath(file) for file in glob.glob('*/*/pics/*.*')]
-soundfiles = [os.path.abspath(file) for file in glob.glob('*/*/sounds/*.*')]
+picfiles = [os.path.abspath(file) for file in glob.glob('Units/*/*/pics/*.*')]
+soundfiles = [os.path.abspath(file) for file in glob.glob('Units/*/*/sounds/*.*')]
 
 
 print "\n \
@@ -494,6 +494,7 @@ def drawlessonstructure():
     pg.display.flip()
 
 def pronunciationpractice(lesson):
+    print unit, str(lesson)
     global pronunciationbuttonpic, pronunciationbutton, menupushed, soundbutton
     menupushed = False
     screen.fill(background_colour)
@@ -502,11 +503,14 @@ def pronunciationpractice(lesson):
     drawnextbutton()
     drawpronunciationbutton(w-200,h/2)
     #lesson = "emotions" #temporary lesson variable before getting sreen picked
-    listofpics = [f for f in listdir(unit + "/" + lesson+"/pics/") if isfile(join(unit + "/" + lesson+"/pics/",f))] #pictures in lesson/pics/ folder
+    listofpics = [f for f in listdir(os.path.join("Units",unit,lesson,"pics")) if isfile(os.path.join("Units",unit,lesson,"pics",f))]
+    #listofpics = [f for f in listdir(unit + "/" + lesson+"/pics/") if isfile(join(unit + "/" + lesson+"/pics/",f))] #pictures in lesson/pics/ folder
     original_length = len(listofpics)
     random.shuffle(listofpics) #shuffle order of lesson
-    picpath = unit + "/" + lesson+"/pics/"
-    soundpath = unit + "/" + lesson+"/sounds/"
+    picpath = os.path.join("Units",unit,lesson,"pics")
+    #picpath = unit + "/" + lesson+"/pics/"
+    soundpath = os.path.join("Units",unit,lesson,"sounds")
+    #soundpath = unit + "/" + lesson+"/sounds/"
     count_originals = 0
     for pic in listofpics:
         print pic
@@ -525,7 +529,7 @@ def pronunciationpractice(lesson):
         wordbuttons = disp(word_display)
         #drawquitbutton()
         drawmenubutton()
-        picimage = pg.image.load(picpath + pic)
+        picimage = pg.image.load(os.path.join(picpath,pic))
         picimage = pg.transform.smoothscale(picimage, getbestratio(screen.get_size()[1]-350,screen.get_size()[0]-350,float(picimage.get_size()[1]),float(picimage.get_size()[0]))) #(screenheight, screenwidht, picheight, picwidth)
         screen.blit(picimage,[5,100])
         #play word sound
@@ -552,9 +556,12 @@ def pronunciationpractice(lesson):
                                 pg.time.wait(10)
                         except:
                             print "OOOOPS, loading/download didn't work"
-                        wordsound = pg.mixer.music.load(soundpath+word+"speech_google.wav")
+                        wordsound = pg.mixer.music.load(os.path.join(soundpath,word+"speech_google.wav"))
                 if soundbutton.collidepoint(pos): #Sound button is pressed
+                    loadword(word_display, word, soundpath)
                     pg.mixer.music.play(0)
+                    while pg.mixer.get_busy():
+                        pg.time.wait(10)
                 if pronunciationbutton.collidepoint(pos):
                     pg.draw.rect(screen,background_colour,(pronunciationbutton.left,pronunciationbutton.top,150,150),0)
                     pronunciationbuttonpic = pg.image.load("recorddot.png").convert_alpha()
@@ -566,16 +573,17 @@ def pronunciationpractice(lesson):
                         print "Using recordinput"
                     except:
                         os.system("rec -c 2 /tmp/voice.aiff trim 0 00:05")
+                        print "Using SoX"
                     pg.draw.rect(screen,background_colour,(pronunciationbutton.left,pronunciationbutton.top,150,150),0)
                     drawpronunciationbutton(w-200,h/2)
                     pg.display.update()
+                    loadword(word_display, word, soundpath)
                     pg.mixer.music.play(0)
-                    pg.time.wait(1000)
+                    while pg.mixer.get_busy():
+                        pg.time.wait(10)
                     try:
                         playinput()
                     except:
-                        output = pg.mixer.music.load("/tmp/input.wav")
-                        pg.mixer.music.play(0)
                         os.system("play /tmp/voice.aiff")
                 elif menubutton.collidepoint(pos):
                     looping = False
@@ -595,11 +603,20 @@ def mainlesson(lesson):
     score = 0
     incorrectscore = 0
     #lesson = "emotions" #temporary lesson variable before getting screen picked
-    listofpics = [f for f in listdir(unit + "/" + lesson+"/pics/") if isfile(join(unit + "/" + lesson+"/pics/",f))] #pictures in unit/lesson/pics/ folder
+    #listofpics = [f for f in listdir(unit + "/" + lesson+"/pics/") if isfile(join(unit + "/" + lesson+"/pics/",f))] #pictures in unit/lesson/pics/ folder
+    #original_length = len(listofpics)
+    #random.shuffle(listofpics) #shuffle order of lesson
+    #picpath = unit + "/" + lesson+"/pics/"
+    #soundpath = unit + "/" + lesson+"/sounds/"
+    listofpics = [f for f in listdir(os.path.join("Units",unit,lesson,"pics")) if isfile(os.path.join("Units",unit,lesson,"pics",f))]
+    #listofpics = [f for f in listdir(unit + "/" + lesson+"/pics/") if isfile(join(unit + "/" + lesson+"/pics/",f))] #pictures in lesson/pics/ folder
     original_length = len(listofpics)
     random.shuffle(listofpics) #shuffle order of lesson
-    picpath = unit + "/" + lesson+"/pics/"
-    soundpath = unit + "/" + lesson+"/sounds/"
+    picpath = os.path.join("Units",unit,lesson,"pics")
+    #picpath = unit + "/" + lesson+"/pics/"
+    soundpath = os.path.join("Units",unit,lesson,"sounds")
+    #soundpath = unit + "/" + lesson+"/sounds/"
+    
     count_originals = 0
     for pic in listofpics:
         trycount = 0
@@ -626,10 +643,10 @@ def mainlesson(lesson):
         choice2 = choices[randomindex[1]]
         choice3 = choices[randomindex[2]]
         choice4 = choices[randomindex[3]]
-        pic1 = pg.image.load(picpath+choice1)
-        pic2 = pg.image.load(picpath+choice2)
-        pic3 = pg.image.load(picpath+choice3)
-        pic4 = pg.image.load(picpath+choice4)
+        pic1 = pg.image.load(os.path.join(picpath,choice1))
+        pic2 = pg.image.load(os.path.join(picpath,choice2))
+        pic3 = pg.image.load(os.path.join(picpath,choice3))
+        pic4 = pg.image.load(os.path.join(picpath,choice4))
         pics = [pic1,pic2,pic3,pic4]
         #scale pictures to max size without stretching
         pic1 = pg.transform.smoothscale(pic1, getbestratio((float(choicebox1[3]-5)),float(choicebox1[2]-5),float(pic1.get_size()[1]),float(pic1.get_size()[0])))
@@ -670,7 +687,7 @@ def mainlesson(lesson):
                                 pg.time.wait(10)
                         except:
                             print "OOOOPS, loading/download didn't work"
-                        wordsound = pg.mixer.music.load(soundpath+word+"speech_google.wav")
+                        loadword(word_display, word, soundpath)
                 if soundbutton.collidepoint(pos): #Sound button is pressed
                     pg.mixer.music.play(0)
                 #Wrong answer is clicked
@@ -685,7 +702,7 @@ def mainlesson(lesson):
                 elif surfs[randomindex.index(0)].collidepoint(pos):
                     correct_sound.play()
                     screen.fill(background_colour)
-                    wordsound = pg.mixer.music.load(soundpath+word+"speech_google.wav")
+                    wordsound = pg.mixer.music.load(os.path.join(soundpath,word+"speech_google.wav"))
                     display_word(word_display)
                     screen.blit(pics[randomindex.index(0)],[(w - pics[randomindex.index(0)].get_rect()[2])/2,(h- pics[randomindex.index(0)].get_rect()[1])/2])
                     pg.display.flip()
@@ -715,11 +732,15 @@ def text_only_lesson(lesson):
     score = 0
     incorrectscore = 0
     #lesson = "emotions" #temporary lesson variable before getting screen picked
-    listofpics = [f for f in listdir(unit + "/" + lesson+"/pics/") if isfile(join(unit + "/" + lesson+"/pics/",f))] #pictures in unit/lesson/pics/ folder
+    listofpics = [f for f in listdir(os.path.join("Units",unit,lesson,"pics")) if isfile(os.path.join("Units",unit,lesson,"pics",f))]
+    #listofpics = [f for f in listdir(unit + "/" + lesson+"/pics/") if isfile(join(unit + "/" + lesson+"/pics/",f))] #pictures in lesson/pics/ folder
     original_length = len(listofpics)
     random.shuffle(listofpics) #shuffle order of lesson
-    picpath = unit + "/" + lesson+"/pics/"
-    soundpath = unit + "/" + lesson+"/sounds/"
+    picpath = os.path.join("Units",unit,lesson,"pics")
+    #picpath = unit + "/" + lesson+"/pics/"
+    soundpath = os.path.join("Units",unit,lesson,"sounds")
+    #soundpath = unit + "/" + lesson+"/sounds/"
+
     count_originals = 0
     for pic in listofpics:
         trycount = 0
@@ -746,10 +767,10 @@ def text_only_lesson(lesson):
         choice2 = choices[randomindex[1]]
         choice3 = choices[randomindex[2]]
         choice4 = choices[randomindex[3]]
-        pic1 = pg.image.load(picpath+choice1)
-        pic2 = pg.image.load(picpath+choice2)
-        pic3 = pg.image.load(picpath+choice3)
-        pic4 = pg.image.load(picpath+choice4)
+        pic1 = pg.image.load(os.path.join(picpath,choice1))
+        pic2 = pg.image.load(os.path.join(picpath,choice2))
+        pic3 = pg.image.load(os.path.join(picpath,choice3))
+        pic4 = pg.image.load(os.path.join(picpath,choice4))
         pics = [pic1,pic2,pic3,pic4]
         #scale pictures to max size without stretching
         pic1 = pg.transform.smoothscale(pic1, getbestratio((float(choicebox1[3])),float(choicebox1[2]),float(pic1.get_size()[1]),float(pic1.get_size()[0])))
@@ -758,14 +779,14 @@ def text_only_lesson(lesson):
         pic4 = pg.transform.smoothscale(pic4, getbestratio((float(choicebox1[3])),float(choicebox1[2]),float(pic4.get_size()[1]),float(pic4.get_size()[0])))
         #render choice text
         #txt1 = text_display_word(choice1,choicebox1)
-        txt1 = render_textrect(choice1, pg.Rect(choicebox1[0],choicebox1[1],choicebox1[2]-3,choicebox1[3]-3), (0, 0, 0), (255, 255, 255))
+        txt1 = render_textrect(download_dict_sound.replace_symbols(choice1), pg.Rect(choicebox1[0],choicebox1[1],choicebox1[2]-3,choicebox1[3]-3), (0, 0, 0), (255, 255, 255))
         surf1 = screen.blit(txt1, choicebox1.topleft)
         #surf1 = pg.Surface.blit(screen,txt1,choicebox1.topleft)
-        txt2 = render_textrect(choice2, pg.Rect(choicebox2[0],choicebox2[1],choicebox2[2]-3,choicebox2[3]-3), (0, 0, 0), (255, 255, 255))
+        txt2 = render_textrect(download_dict_sound.replace_symbols(choice2), pg.Rect(choicebox2[0],choicebox2[1],choicebox2[2]-3,choicebox2[3]-3), (0, 0, 0), (255, 255, 255))
         surf2 = pg.Surface.blit(screen,txt2,choicebox2.topleft)
-        txt3 = render_textrect(choice3, pg.Rect(choicebox3[0],choicebox3[1],choicebox3[2]-3,choicebox3[3]-3), (0, 0, 0), (255, 255, 255))
+        txt3 = render_textrect(download_dict_sound.replace_symbols(choice3), pg.Rect(choicebox3[0],choicebox3[1],choicebox3[2]-3,choicebox3[3]-3), (0, 0, 0), (255, 255, 255))
         surf3 = pg.Surface.blit(screen,txt3,choicebox3.topleft)
-        txt4 = render_textrect(choice4, pg.Rect(choicebox4[0],choicebox4[1],choicebox4[2]-3,choicebox4[3]-3), (0, 0, 0), (255, 255, 255))
+        txt4 = render_textrect(download_dict_sound.replace_symbols(choice4), pg.Rect(choicebox4[0],choicebox4[1],choicebox4[2]-3,choicebox4[3]-3), (0, 0, 0), (255, 255, 255))
         surf4 = pg.Surface.blit(screen,txt4,choicebox4.topleft)
         #match to choiceboxes surfaces
         pics = [pic1,pic2,pic3,pic4]
@@ -799,7 +820,7 @@ def text_only_lesson(lesson):
                 elif surfs[randomindex.index(0)].collidepoint(pos):
                     correct_sound.play()
                     screen.fill(background_colour)
-                    wordsound = pg.mixer.music.load(soundpath+word+"speech_google.wav")
+                    wordsound = pg.mixer.music.load(os.path.join(soundpath,word+"speech_google.wav"))
                     display_word(word_display)
                     screen.blit(pics[randomindex.index(0)],[(w - pics[randomindex.index(0)].get_rect()[2])/2,(h- pics[randomindex.index(0)].get_rect()[1])/2])
                     pg.display.flip()
@@ -886,7 +907,7 @@ def unitmenu():
     global unit
     uniton = True
     screen.fill(background_colour)
-    listoffolders = [f for f in listdir("./") if isfile(join("./",f)) == False and f not in ["examplelesson","exampleunit","Test","RosettaTablet.app", ".git", "sounds", "extras"]]
+    listoffolders = [f for f in listdir(os.path.abspath("Units")) if isfile(os.path.join(os.path.abspath("Units"),f)) == False and f not in ["examplelesson","exampleunit","Test","RosettaTablet.app", ".git", "sounds", "extras"]]
     listoffolderlables = [screen.blit(mysmallfont.render(str(listoffolders.index(folder)+1)+". "+folder.title(), 1, black),[20,45*listoffolders.index(folder)]) for folder in listoffolders]
     drawquitbutton()
     pg.display.flip()
@@ -903,9 +924,9 @@ def unitmenu():
                 if folder.collidepoint(pos):
                     unit = listoffolders[listoffolderlables.index(folder)]
                     print unit
-                    lessonmenu(unit)
+                    lessonmenu(os.path.join("Units", unit))
                     pg.display.quit
-                    return unit
+                    return os.path.join("Units", unit)
 
 def spell(lesson):
     global soundbutton, menupushed
@@ -1006,11 +1027,19 @@ def spell(lesson):
     score = 0
     incorrectscore = 0
     #lesson = "emotions" #temporary lesson variable before getting screen picked
-    listofpics = [f for f in listdir(unit + "/" + lesson+"/pics/") if isfile(join(unit + "/" + lesson+"/pics/",f))] #pictures in unit/lesson/pics/ folder
+    #listofpics = [f for f in listdir(unit + "/" + lesson+"/pics/") if isfile(join(unit + "/" + lesson+"/pics/",f))] #pictures in unit/lesson/pics/ folder
+    #original_length = len(listofpics)
+    #random.shuffle(listofpics) #shuffle order of lesson
+    #picpath = unit + "/" + lesson+"/pics/"
+    #soundpath = unit + "/" + lesson+"/sounds/"
+    listofpics = [f for f in listdir(os.path.join("Units",unit,lesson,"pics")) if isfile(os.path.join("Units",unit,lesson,"pics",f))]
+    #listofpics = [f for f in listdir(unit + "/" + lesson+"/pics/") if isfile(join(unit + "/" + lesson+"/pics/",f))] #pictures in lesson/pics/ folder
     original_length = len(listofpics)
     random.shuffle(listofpics) #shuffle order of lesson
-    picpath = unit + "/" + lesson+"/pics/"
-    soundpath = unit + "/" + lesson+"/sounds/"
+    picpath = os.path.join("Units",unit,lesson,"pics")
+    #picpath = unit + "/" + lesson+"/pics/"
+    soundpath = os.path.join("Units",unit,lesson,"sounds")
+    #soundpath = unit + "/" + lesson+"/sounds/"
     count_originals = 0
     word_list = [x[:x.rfind(".")] for x in listofpics]
     for word in word_list:
@@ -1101,7 +1130,7 @@ def lessonmenu(unit):
     lessonon = True
     screen.fill(background_colour)
     mysmallfont = pg.font.Font(font, 40)
-    listoffolders = [f for f in listdir("./"+unit) if isfile(join("./"+unit,f)) == False]
+    listoffolders = [f for f in listdir(unit) if isfile(os.path.join(unit,f)) == False]
     try:
         listoffolders.remove("examplelesson") #remove blank lesson from menu
     except:

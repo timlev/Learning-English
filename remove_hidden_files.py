@@ -19,8 +19,8 @@ if len(os.path.split(sys.argv[0])[0]) > 0:
 ########## DOWNLOAD GOOGLE SPEECH #########
 replacementsdict = {'.exclamationmark': '!', '.apostrophe': "'", '.questionmark': '?', '.comma': ',', '.colon': ':'}
 
-picfiles = [os.path.abspath(file) for file in glob.glob('*/*/pics/*.*')]
-soundfiles = [os.path.abspath(file) for file in glob.glob('*/*/sounds/*.*')]
+picfiles = [os.path.abspath(file) for file in glob.glob('Units/*/*/pics/*.*')]
+soundfiles = [os.path.abspath(file) for file in glob.glob('Units/*/*/sounds/*.*')]
 
 comparepicfiles = [file[:file.rindex(".")] for file in picfiles]
 comparesoundfiles =[file.replace("speech_google.ogg","").replace("speech_google.wav","").replace("/sounds/","/pics/") for file in soundfiles]

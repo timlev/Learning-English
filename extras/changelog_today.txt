@@ -13,3 +13,15 @@ Idea for navigating back to .app or .exe folder from Resources:
 while DIRECTORY not in dirs:
 	chdir ..
 	dirs = os.walk ....
+
+
+
+
+Move units to Units folder
+Finished - to change remove_hidden_files
+
+Edited listofpics in pronunciationpractice, soundpath, picpath
+
+
+*Issue with word sound and recording playing at the same time in pronunciationpractice (using SoX, pyaudio untested)
+
