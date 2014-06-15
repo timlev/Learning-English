@@ -71,10 +71,12 @@ for root, dirs, files in os.walk("."):
 			f = f.replace(ext,"")
 			for word in f.split(" "):
 				word_filename = word
-				word = word.lower()
-				for sym in [sym for sym in replacementsdict.keys() if sym in word_filename]:
-					word = word_filename.replace(sym,replacementsdict[sym])
-				word.replace("!","")
+				word = download_dict_sound.replace_symbols(word)
+				word = download_dict_sound.remove_symbols_lower(word)
+#				word = word.lower()
+#				for sym in [sym for sym in replacementsdict.keys() if sym in word_filename]:
+#					word = word_filename.replace(sym,replacementsdict[sym])
+#				word.replace("!","")
 				words.append(word)
 			#print f
 			extensions.append(ext)
@@ -82,21 +84,24 @@ for root, dirs, files in os.walk("."):
 			#print word
 		#all_files.append(f)
 
-print set(words)
+#print set(words)
 
 sound_files = os.listdir("sounds")
+set_of_words = set([os.path.splitext(f)[0] for f in sound_files])
 for word in set(words):
-	try:
-		if word + ".mp3" not in sound_files:
+	if word not in set_of_words: #already took care of extensions
+		try:
 			download_dict_sound.download(word,"sounds")
 			download_dict_sound.convert_mp3_to_wav(os.path.join("sounds",word+".mp3"))
-	except:
-		problems.append(word)
-		pass
+			os.remove(os.path.join("sounds",word+".mp3")) #removing mp3 file
+		except:
+			problems.append(word)
+			#print word, "Dict download didn't work"
 
+print "Problem words", problems
 
 
 #Change ownership properties - writable by teacher and readable by all others
-print os.getcwd()
+print "Changing permissions for",os.getcwd()
 for d in os.walk(os.getcwd()).next()[1]:
     os.system('chmod -R 755 "' + d + '"')

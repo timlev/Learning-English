@@ -20,12 +20,25 @@ def download(word, directory="./"):
             break
     print query
     print mp3source
-    print "Downloaded to:", directory + word + ".mp3"
+    print "Downloading to:", os.path.join(directory, word + ".mp3")
 
     getmp3 = urllib2.urlopen(mp3source)
     ofp = open(os.path.join(directory, word + ".mp3"),'wb')
     ofp.write(getmp3.read())
     ofp.close()
+
+def replace_symbols(word):
+    replacementsdict = {'.exclamationmark': '!', '.apostrophe': "'", '.questionmark': '?', '.comma': ',', '.colon': ':'}
+    sentence_corrected = word
+    for sym in [sym for sym in replacementsdict.keys() if sym in sentence_corrected]:
+        sentence_corrected = sentence_corrected.replace(sym,replacementsdict[sym])
+    return sentence_corrected
+
+def remove_symbols_lower(word):
+    keep = ["'"]
+    ind_word = "".join([l for l in list(word) if l.isalnum() or l == "'"]) #exclude characters except '
+    ind_word = ind_word.lower() #lowercase
+    return ind_word
 
 def download_google(word, directory="./"):
     replacementsdict = {'.exclamationmark': '!', '.apostrophe': "'", '.questionmark': '?', '.comma': ',', '.colon': ':'}

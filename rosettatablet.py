@@ -28,45 +28,11 @@ if len(os.path.split(sys.argv[0])[0]) > 0:
     os.chdir(os.path.split(sys.argv[0])[0])
 dict_sounds_path = "./sounds/"
 
-replacementsdict = {'.exclamationmark': '!', '.apostrophe': "'", '.questionmark': '?', '.comma': ',', '.colon': ':'}
+#replacementsdict = {'.exclamationmark': '!', '.apostrophe': "'", '.questionmark': '?', '.comma': ',', '.colon': ':'}
 
 picfiles = [os.path.abspath(file) for file in glob.glob('*/*/pics/*.*')]
 soundfiles = [os.path.abspath(file) for file in glob.glob('*/*/sounds/*.*')]
-"""
-comparepicfiles = [file[:file.rindex(".")] for file in picfiles]
-comparesoundfiles =[file.replace("speech_google.ogg","").replace("speech_google.wav","").replace("/sounds/","/pics/") for file in soundfiles]
-print len(picfiles)
-print len(soundfiles)
-print len(comparepicfiles)
-print len(comparesoundfiles)
 
-compared = [os.path.split(file) for file in comparepicfiles if file not in comparesoundfiles]
-
-google_translate_url = 'http://translate.google.com/translate_tts'
-opener = urllib2.build_opener()
-opener.addheaders = [('User-agent', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)')]
-
-for dirpath, sentence in compared:
-    outputdir = dirpath.replace("/pics","/sounds/")
-    sentence_corrected = sentence
-    for sym in [sym for sym in replacementsdict.keys() if sym in sentence_corrected]:
-        sentence_corrected = sentence_corrected.replace(sym,replacementsdict[sym])
-    response = opener.open(google_translate_url+'?q='+sentence_corrected.replace(' ','%20')+'&tl=en')
-    ofp = open(outputdir+sentence+'speech_google.mp3','wb')
-    ofp.write(response.read())
-    ofp.close()
-    if platform.system() == 'Linux':
-        os.system('mplayer -ao pcm:fast:waveheader:file="'+str(outputdir+sentence)+'speech_google.wav" -format s16le -af resample=44100 -vo null -vc null "'+str(outputdir+sentence)+'speech_google.mp3"')
-        #os.system('avconv -i '+'"'+str(outputdir+sentence)+'speech_google.mp3" '+'"'+str(outputdir+sentence)+'speech_google1.wav"') #on Linux
-        #os.system('avconv -i '+'"'+str(outputdir+sentence)+'speech_google.mp3" -acodec libvorbis '+'"'+str(outputdir+sentence)+'speech_google.ogg"') #on Linux
-    else:
-        print "*"*20 + "Trying afconvert" + "*"*20
-        os.system("afconvert -f 'WAVE' -d I16@44100 " + "'"+str(outputdir+sentence)+"speech_google.mp3' -o "+ '"'+str(outputdir+sentence)+'speech_google.wav"') #on a mac
-        #os.system("afconvert -f 'WAVE' -d I16@44100 " + "'"+str(outputdir+sentence)+"speech_google.mp3' -o"+ '"'+str(outputdir+sentence)+'speech_google3.wav"') #on a mac
-    os.system('rm '+'"'+str(outputdir+sentence)+'speech_google.mp3"')
-    print outputdir
-    print sentence
-"""
 
 print "\n \
 How to use:\n \
@@ -173,8 +139,9 @@ def render_textrect(string, rect, text_color, background_color, justification=0,
     Failure - raises a TextRectException if the text won't fit onto the surface.
     """
     word_display = string[:string.rindex(".")]
-    for sym in [sym for sym in replacementsdict.keys() if sym in word_display]:
-        word_display = word_display.replace(sym,replacementsdict[sym])
+    word_siplay = download_dict_sound.replace_symbols(word_display)
+    #for sym in [sym for sym in replacementsdict.keys() if sym in word_display]:
+    #    word_display = word_display.replace(sym,replacementsdict[sym])
     string = word_display
     final_lines = []
 
@@ -253,31 +220,35 @@ def disp(word):
 
 def loadword(word_display, word, soundpath):
     dict_sound_files = os.listdir(os.path.abspath(dict_sounds_path))
+    set_of_words = set([os.path.splitext(f)[0] for f in dict_sound_files])
     #Try to play dict_download if single word
-    if " " not in word_display:
-        ind_word = "".join([l for l in list(word_display) if l.isalnum()])
-        ind_word = ind_word.lower()
-        if ind_word + ".mp3" not in dict_sound_files or ind_word + ".wav" not in dict_sound_files:
+    if " " not in word_display: #For single word
+        ind_word = download_dict_sound.remove_symbols_lower(word_display)
+        if ind_word not in set_of_words:
             try:#download
                 download_dict_sound.download(ind_word,dict_sounds_path)
+                download_dict_sound.convert_mp3_to_wav(os.path.join(dict_sounds_path,ind_word + ".mp3"))
+                os.remove(os.path.join(dict_sounds_path,ind_word + ".mp3"))
                 dict_sound_files = os.listdir(os.path.abspath(dict_sounds_path))
+                set_of_words = set([os.path.splitext(f)[0] for f in dict_sound_files])
             except:
                 print "OOPS, dowload didn't work."
-        try:
+        try: #Load word wav file
+            wordsound = pg.mixer.music.load(os.path.join(dict_sounds_path,ind_word + ".wav"))
+            print "Using Dictionary Sound"
+        except: #Load 
             if sys.platform == "darwin":
-                download_dict_sound.convert_mp3_to_wav(os.path.join(dict_sounds_path,ind_word + ".mp3"))
-                wordsound = pg.mixer.music.load(os.path.join(dict_sounds_path,ind_word + ".wav"))
-            else:
-                wordsound = pg.mixer.music.load(os.path.join(dict_sounds_path,ind_word + ".mp3"))
-        except:
-            if sys.platform == "darwin":
+                print "Using Mac Say"
                 wordsound = pg.mixer.music.load(download_dict_sound.get_macsay(word_display, word))
             else:
+                print "Using google speech"
                 wordsound = pg.mixer.music.load(soundpath+word+"speech_google.wav")
-    else:
+    else: #For multiple words
         if sys.platform == "darwin":
+            print "Using Mac Say"
             wordsound = pg.mixer.music.load(download_dict_sound.get_macsay(word_display, word))
         else:
+            print "Using google speech"
             wordsound = pg.mixer.music.load(soundpath+word+"speech_google.wav")
     return wordsound
 
@@ -308,8 +279,9 @@ def display_word(word):
 
 def text_display_word(word, choicebox):
     word_display = word[:word.rindex(".")]
-    for sym in [sym for sym in replacementsdict.keys() if sym in word_display]:
-        word_display = word_display.replace(sym,replacementsdict[sym])
+    word_display = download_dict_sound.replace_symbols(word_display)
+    #for sym in [sym for sym in replacementsdict.keys() if sym in word_display]:
+    #    word_display = word_display.replace(sym,replacementsdict[sym])
     myfont = pg.font.Font(font, 30)
     label = myfont.render(word_display, 1, black)
     labelwidth = label.get_rect()[2]
@@ -545,8 +517,9 @@ def pronunciationpractice(lesson):
         answer = pic
         word = answer[:answer.rindex(".")]
         word_display = word#.replace(".questionmark","?")
-        for sym in [sym for sym in replacementsdict.keys() if sym in word_display]:
-            word_display = word_display.replace(sym,replacementsdict[sym])
+        word_display = download_dict_sound.replace_symbols(word_display)
+        #for sym in [sym for sym in replacementsdict.keys() if sym in word_display]:
+        #    word_display = word_display.replace(sym,replacementsdict[sym])
         loadword(word_display, word, soundpath)
         #display_word(word_display)
         wordbuttons = disp(word_display)
@@ -635,8 +608,9 @@ def mainlesson(lesson):
         answer = pic
         word = answer[:answer.rindex(".")]
         word_display = word
-        for sym in [sym for sym in replacementsdict.keys() if sym in word_display]:
-            word_display = word_display.replace(sym,replacementsdict[sym])
+        word_display = download_dict_sound.replace_symbols(word_display)
+        #for sym in [sym for sym in replacementsdict.keys() if sym in word_display]:
+        #    word_display = word_display.replace(sym,replacementsdict[sym])
         loadword(word_display, word, soundpath)
         choices = ["","","",""]
         choices[0] = answer #choiceX = answer ... we don't know which choice number it is
@@ -723,6 +697,7 @@ def mainlesson(lesson):
                     break
                 elif menubutton.collidepoint(pos):
                     looping = False
+                    lessonon = False
                     menupushed = True
                     break
         if menupushed == True:
@@ -753,8 +728,9 @@ def text_only_lesson(lesson):
         answer = pic
         word = answer[:answer.rindex(".")]
         word_display = word
-        for sym in [sym for sym in replacementsdict.keys() if sym in word_display]:
-            word_display = word_display.replace(sym,replacementsdict[sym])
+        word_display = download_dict_sound.replace_symbols(word_display)
+        #for sym in [sym for sym in replacementsdict.keys() if sym in word_display]:
+        #    word_display = word_display.replace(sym,replacementsdict[sym])
         loadword(word_display, word, soundpath)
         choices = ["","","",""]
         choices[0] = answer #choiceX = answer ... we don't know which choice number it is
@@ -834,6 +810,7 @@ def text_only_lesson(lesson):
                     break
                 elif menubutton.collidepoint(pos):
                     looping = False
+                    lessonon = False
                     menupushed = True
                     break
         if menupushed == True:
@@ -909,7 +886,7 @@ def unitmenu():
     global unit
     uniton = True
     screen.fill(background_colour)
-    listoffolders = [f for f in listdir("./") if isfile(join("./",f)) == False and f not in ["examplelesson","exampleunit","Test","RosettaTablet.app"]]
+    listoffolders = [f for f in listdir("./") if isfile(join("./",f)) == False and f not in ["examplelesson","exampleunit","Test","RosettaTablet.app", ".git", "sounds", "extras"]]
     listoffolderlables = [screen.blit(mysmallfont.render(str(listoffolders.index(folder)+1)+". "+folder.title(), 1, black),[20,45*listoffolders.index(folder)]) for folder in listoffolders]
     drawquitbutton()
     pg.display.flip()
@@ -1017,6 +994,7 @@ def spell(lesson):
                 pos = pg.mouse.get_pos()
                 if menubutton.collidepoint(pos):
                     looping = False
+                    lessonon = False
                     menupushed = True
                     break
 
@@ -1037,8 +1015,9 @@ def spell(lesson):
     word_list = [x[:x.rfind(".")] for x in listofpics]
     for word in word_list:
         word_sound_file = word
-        for sym in [sym for sym in replacementsdict.keys() if sym in word]:
-            word = word.replace(sym,replacementsdict[sym])
+        word = download_dict_sound.replace_symbols(word)
+        #for sym in [sym for sym in replacementsdict.keys() if sym in word]:
+        #    word = word.replace(sym,replacementsdict[sym])
         screen.fill(white)
         repeatpicbutton = screen.blit(soundpic, (300,300))
         correct_word = word
@@ -1081,6 +1060,7 @@ def spell(lesson):
                     #badwords.append(correct_word)
                 elif menubutton.collidepoint(pos):
                     looping = False
+                    lessonon = False
                     menupushed = True
                     break
             elif event.type == pg.KEYDOWN:

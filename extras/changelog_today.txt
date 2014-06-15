@@ -1,0 +1,15 @@
+Removed Download from Google Code in rosettatablet.py. This is taken care of by remove_hidden_files.py.
+
+Simplified search for words not downloaded from dict yet (in rosetta/loadword() and remove)
+	Remove mp3 file after wav conversion, can now clear sounds folder of mp3s to save space
+
+Fixed reroute to menu when activity chosen:
+	added lessonon = False when menubutton pushed
+
+Moved replacementdict work to replace_symbols(word) in download_dict_sound
+
+
+Idea for navigating back to .app or .exe folder from Resources:
+while DIRECTORY not in dirs:
+	chdir ..
+	dirs = os.walk ....
