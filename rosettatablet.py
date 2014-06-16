@@ -22,6 +22,15 @@ import tempfile
 import include.download_dict_sound as download_dict_sound
 #http://glowingpython.blogspot.com/2012/11/text-to-speech-with-correct-intonation.html
 
+try:
+    with open("testfile.txt", "w") as fp:
+        fp.write("This is a test.")
+    import remove_hidden_files
+    os.remove("testfile.txt")
+except:
+    print "You do not have permissions to write in this directory. Files not updated this time."
+
+
 
 #change working dir to script folder
 if len(os.path.split(sys.argv[0])[0]) > 0:
