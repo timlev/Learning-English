@@ -1,8 +1,9 @@
 import os
-import include.download_dict_sound
+import include.download_dict_sound as download_dict_sound
 import urllib2
 import sys
 import glob
+import platform
 
 ######## REMOVE HIDDEN (.) FILES ##########
 for root, dirs, files in os.walk("./"):
