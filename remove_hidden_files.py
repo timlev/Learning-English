@@ -8,7 +8,7 @@ import platform
 ######## REMOVE HIDDEN (.) FILES ##########
 for root, dirs, files in os.walk("./"):
 	for f in files:
-		if f.startswith(".") and "RosettaTablet.app" not in root f != ".gitignore":
+		if f.startswith(".") and "RosettaTablet.app" not in root and f != ".gitignore":
 			#os.remove(os.join(root,f))
 			print os.path.join(os.path.abspath(root),f)
 			os.remove(os.path.join(os.path.abspath(root),f))
