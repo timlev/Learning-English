@@ -1,5 +1,5 @@
 import os
-import download_dict_sound
+import include.download_dict_sound
 import urllib2
 import sys
 import glob

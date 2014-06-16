@@ -19,14 +19,14 @@ except:
 import glob
 import platform
 import tempfile
-import download_dict_sound
+import include.download_dict_sound as download_dict_sound
 #http://glowingpython.blogspot.com/2012/11/text-to-speech-with-correct-intonation.html
 
 
 #change working dir to script folder
 if len(os.path.split(sys.argv[0])[0]) > 0:
     os.chdir(os.path.split(sys.argv[0])[0])
-dict_sounds_path = "./sounds/"
+dict_sounds_path = os.path.join("sounds")
 
 #replacementsdict = {'.exclamationmark': '!', '.apostrophe': "'", '.questionmark': '?', '.comma': ',', '.colon': ':'}
 
@@ -86,7 +86,7 @@ original_length = 0
 completeddict = {}
 buttonresult = False
 # create the basic window/screen and a title/caption
-icon = pg.image.load("headphones_globe.png")
+icon = pg.image.load(os.path.join("icons","headphones_globe.png"))
 pg.display.set_icon(icon)
 
 screen = pg.display.set_mode((0,0)) #full sized window mode pg.FULLSCREEN
@@ -95,17 +95,17 @@ size = screen.get_size()
 w = size[0]
 h = size[1]
 pg.display.set_caption("RosettaTablet")
-font = "DidactGothic.ttf"
+font = os.path.join("include","DidactGothic.ttf")
 myfont = pg.font.Font(font, 50)
 mysmallfont = pg.font.Font(font, 40)
 
 #correct/wrong sounds and pics
-sound = pg.mixer.Sound('rails.wav')
-wrong_sound = pg.mixer.Sound('CymbalCrash.wav')
-correct_sound = pg.mixer.Sound('GuitarStrum.wav')
-correctpic = pg.image.load("correct.png").convert_alpha()
-wrongpic = pg.image.load("wrong.png").convert_alpha()
-micpic = pg.image.load("mic.png").convert_alpha()
+sound = pg.mixer.Sound(os.path.join("include",'rails.wav'))
+wrong_sound = pg.mixer.Sound(os.path.join("include",'CymbalCrash.wav'))
+correct_sound = pg.mixer.Sound(os.path.join("include",'GuitarStrum.wav'))
+correctpic = pg.image.load(os.path.join("icons","correct.png")).convert_alpha()
+wrongpic = pg.image.load(os.path.join("icons","wrong.png")).convert_alpha()
+micpic = pg.image.load(os.path.join("icons","mic.png")).convert_alpha()
 
 # show the whole thing
 pg.display.flip()
@@ -428,22 +428,22 @@ def displayactivitychoice():
 
 def drawmainbutton(x,y):
     global mainbuttonpic, mainbutton
-    mainbuttonpic = pg.image.load("pictures.png").convert_alpha()
+    mainbuttonpic = pg.image.load(os.path.join("icons","pictures.png")).convert_alpha()
     mainbutton = screen.blit(mainbuttonpic, [x,y])
 
 def drawpronunciationbutton(x,y):
     global pronunciationbuttonpic, pronunciationbutton
-    pronunciationbuttonpic = pg.image.load("mic.png")#.convert_alpha()
+    pronunciationbuttonpic = pg.image.load(os.path.join("icons","mic.png"))#.convert_alpha()
     pronunciationbutton = screen.blit(pronunciationbuttonpic, [x,y])
 
 def drawreadbutton(x,y):
     global readbutton, readbuttonpic
-    readbuttonpic = pg.image.load("Icon_Text.png")#.convert_alpha()
+    readbuttonpic = pg.image.load(os.path.join("icons","Icon_Text.png"))#.convert_alpha()
     readbutton = screen.blit(readbuttonpic, [x,y])
 
 def drawspellbutton(x,y):
     global spellbuttonpic, spellbutton
-    spellbuttonpic = pg.image.load("spelling.png").convert_alpha()
+    spellbuttonpic = pg.image.load(os.path.join("icons","spelling.png")).convert_alpha()
     spellbutton = screen.blit(spellbuttonpic, [x,y])
 
 def drawquitbutton():
@@ -489,7 +489,7 @@ def drawlessonstructure():
     choicebox2 = pg.draw.rect(screen, black, (w/2,100,(w)/2,(h-200)/2), 3)
     choicebox3 = pg.draw.rect(screen, black, (0,((h-200)/2)+100,(w)/2,(h-200)/2), 3)
     choicebox4 = pg.draw.rect(screen, black, (w/2,((h-200)/2)+100,(w)/2,(h-200)/2), 3)
-    soundpic = pg.image.load('sound.png')
+    soundpic = pg.image.load(os.path.join("icons",'sound.png'))
     soundbutton = screen.blit(soundpic, (0,0))
     pg.display.flip()
 
@@ -498,8 +498,8 @@ def pronunciationpractice(lesson):
     global pronunciationbuttonpic, pronunciationbutton, menupushed, soundbutton
     menupushed = False
     screen.fill(background_colour)
-    soundpic = pg.image.load('sound.png')
-    recorddot = pg.image.load('recorddot.png')
+    soundpic = pg.image.load(os.path.join("icons",'sound.png'))
+    recorddot = pg.image.load(os.path.join("icons",'recorddot.png'))
     drawnextbutton()
     drawpronunciationbutton(w-200,h/2)
     #lesson = "emotions" #temporary lesson variable before getting sreen picked
@@ -564,7 +564,7 @@ def pronunciationpractice(lesson):
                         pg.time.wait(10)
                 if pronunciationbutton.collidepoint(pos):
                     pg.draw.rect(screen,background_colour,(pronunciationbutton.left,pronunciationbutton.top,150,150),0)
-                    pronunciationbuttonpic = pg.image.load("recorddot.png").convert_alpha()
+                    pronunciationbuttonpic = pg.image.load(os.path.join("icons","recorddot.png")).convert_alpha()
                     pronunciationbutton = screen.blit(pronunciationbuttonpic, [w-200,h/2])
                     pg.display.update()
                     try:
@@ -860,15 +860,15 @@ def displayscore(lesson):
     for box in boxtexts:
         dist = (w/4)*(boxtexts.index(box))
         screen.blit(box, [dist+10,100])
-    chooselessonpic = pg.image.load("next.png").convert_alpha()
+    chooselessonpic = pg.image.load(os.path.join("icons","next.png")).convert_alpha()
     chooselessonbuttontext = mysmallfont.render("Choose a lesson", 2, black)
     chooselessonbuttonbox = pg.draw.rect(screen,gray,((w/2)-(chooselessonbuttontext.get_rect()[2]/2)-3,h-200-3,chooselessonbuttontext.get_width()+6,chooselessonbuttontext.get_height()+6),0)
     chooselessonbutton = screen.blit(chooselessonbuttontext, [(w/2)-(chooselessonbuttontext.get_rect()[2]/2),h-200])
     repeatlessonbuttontext = mysmallfont.render("Repeat", 2, black)
     repeatlessonbuttonbox = pg.draw.rect(screen,gray,((w/2)-(repeatlessonbuttontext.get_rect()[2]/2)-3,h-200-3-65,repeatlessonbuttontext.get_width()+6,repeatlessonbuttontext.get_height()+6),0)
     repeatlessonbutton = screen.blit(repeatlessonbuttontext, [(w/2)-(repeatlessonbuttontext.get_rect()[2]/2),h-200-65])
-    repeatpic = pg.image.load("repeat.png").convert_alpha()
-    pencilpic = pg.image.load("pencil.png").convert_alpha()
+    repeatpic = pg.image.load(os.path.join("icons","repeat.png")).convert_alpha()
+    pencilpic = pg.image.load(os.path.join("icons","pencil.png")).convert_alpha()
     screen.blit(pencilpic, [w/2,h/2])
     nex = screen.blit(chooselessonpic, [chooselessonbuttonbox[0]-75,chooselessonbuttonbox[1]-3])
     rep = screen.blit(repeatpic, [repeatlessonbuttonbox[0]-75,repeatlessonbuttonbox[1]-3])
@@ -940,7 +940,7 @@ def spell(lesson):
     w = size[0]
     h = size[1]
     pg.display.set_caption("RosettaTablet")
-    soundpic = pg.image.load('sound.png')
+    soundpic = pg.image.load(os.path.join("icons",'sound.png'))
     soundbutton = screen.blit(soundpic, (0,0))
     drawmenubutton()
     pg.display.flip
