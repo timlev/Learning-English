@@ -258,7 +258,7 @@ def loadword(word_display, word, soundpath):
             wordsound = pg.mixer.music.load(download_dict_sound.get_macsay(word_display, word))
         else:
             print "Using google speech"
-            wordsound = pg.mixer.music.load(soundpath+word+"speech_google.wav")
+            wordsound = pg.mixer.music.load(os.path.join(soundpath,word+"speech_google.wav"))
     return wordsound
 
 def display_word(word):
