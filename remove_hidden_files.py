@@ -87,9 +87,13 @@ for root, dirs, files in os.walk("."):
 
 #print set(words)
 
-sound_files = os.listdir("sounds")
+sound_files = os.listdir(os.path("sounds"))
+print os.getcwd()
+print sound_files
 set_of_words = set([os.path.splitext(f)[0] for f in sound_files])
+print set_of_words
 for word in set(words):
+	print word
 	if word not in set_of_words: #already took care of extensions
 		try:
 			download_dict_sound.download(word,"sounds")
