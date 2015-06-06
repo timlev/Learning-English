@@ -2,8 +2,18 @@ import urllib2
 import os
 import tempfile
 import platform
+def check_downloaded_word(word, directory="./"):
+    soundfiles = os.listdir(directory)
+    #strip extension
+    downloaded_words = [os.path.splitext(x)[0] for x in soundfiles]
+    if word in downloaded_words:
+        return True
+    else:
+        return False
 
 def download(word, directory="./"):
+    if check_downloaded_word(word, directory):
+        return
     base = "http://dictionary.cambridge.org/us/dictionary/american-english/"
     qmid = "?q="
     #end = "#"
@@ -12,7 +22,7 @@ def download(word, directory="./"):
     response = urllib2.urlopen(query)
     mp3source = ""
     for line in response:
-        if "sound audio_play_button pron-us" in line and word + ".mp3" in line:
+        if "sound audio_play_button pron-icon us" in line and word + ".mp3" in line:
             #print line
             start = line.find("data-src-mp3=") + len("data-src-mp3=") + 1
             end = line.find(".mp3") + len(".mp3")
@@ -21,11 +31,13 @@ def download(word, directory="./"):
     print query
     print mp3source
     print "Downloading to:", os.path.join(directory, word + ".mp3")
-
-    getmp3 = urllib2.urlopen(mp3source)
-    ofp = open(os.path.join(directory, word + ".mp3"),'wb')
-    ofp.write(getmp3.read())
-    ofp.close()
+    try:
+        getmp3 = urllib2.urlopen(mp3source)
+        ofp = open(os.path.join(directory, word + ".mp3"),'wb')
+        ofp.write(getmp3.read())
+        ofp.close()
+    except:
+        print "Could not download:", word
 
 def replace_symbols(word):
     replacementsdict = {'.exclamationmark': '!', '.apostrophe': "'", '.questionmark': '?', '.comma': ',', '.colon': ':'}
