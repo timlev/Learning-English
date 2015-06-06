@@ -245,13 +245,13 @@ def loadword(word_display, word, soundpath):
         try: #Load word wav file
             wordsound = pg.mixer.music.load(os.path.join(dict_sounds_path,ind_word + ".wav"))
             print "Using Dictionary Sound"
-        except: #Load 
+        except: #Load
             if sys.platform == "darwin":
                 print "Using Mac Say"
                 wordsound = pg.mixer.music.load(download_dict_sound.get_macsay(word_display, word))
             else:
                 print "Using google speech"
-                wordsound = pg.mixer.music.load(soundpath+word+"speech_google.wav")
+                wordsound = pg.mixer.music.load(os.path.join(soundpath,word+"speech_google.wav"))
     else: #For multiple words
         if sys.platform == "darwin":
             print "Using Mac Say"
@@ -625,7 +625,7 @@ def mainlesson(lesson):
     #picpath = unit + "/" + lesson+"/pics/"
     soundpath = os.path.join("Units",unit,lesson,"sounds")
     #soundpath = unit + "/" + lesson+"/sounds/"
-    
+
     count_originals = 0
     for pic in listofpics:
         trycount = 0
@@ -1190,4 +1190,3 @@ while True:
             unitmenu()
     else:
         unitmenu()
-
