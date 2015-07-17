@@ -1,7 +1,7 @@
-#py2applet --make-setup rosettatablet.py;
+#py2applet --make-setup learningenglish.py;
 python setup.py py2app;
-cp -R ../rosetta-tablet/Units dist/rosettatablet.app/Contents/Resources/;
-cp -R ../rosetta-tablet/icons dist/rosettatablet.app/Contents/Resources/;
-cp -R ../rosetta-tablet/extras dist/rosettatablet.app/Contents/Resources/;
-cp -R ../rosetta-tablet/sounds dist/rosettatablet.app/Contents/Resources/;
-cp -R ../rosetta-tablet/include dist/rosettatablet.app/Contents/Resources/;
+cp -R ../Learning-English/Units dist/learningenglish.app/Contents/Resources/;
+cp -R ../Learning-English/icons dist/learningenglish.app/Contents/Resources/;
+cp -R ../Learning-English/extras dist/learningenglish.app/Contents/Resources/;
+cp -R ../Learning-English/sounds dist/learningenglish.app/Contents/Resources/;
+cp -R ../Learning-English/include dist/learningenglish.app/Contents/Resources/;

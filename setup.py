@@ -7,7 +7,7 @@ Usage:
 
 from setuptools import setup
 
-APP = ['rosettatablet.py']
+APP = ['learningenglish.py']
 DATA_FILES = []
 OPTIONS = {'argv_emulation': True}
 
