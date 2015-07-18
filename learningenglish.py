@@ -25,8 +25,9 @@ import include.download_dict_sound as download_dict_sound
 try:
     with open("testfile.txt", "w") as fp:
         fp.write("This is a test.")
-    import remove_hidden_files
     os.remove("testfile.txt")
+    import remove_hidden_files
+
 except:
     print "You do not have permissions to write in this directory. Files not updated this time."
 
@@ -233,15 +234,6 @@ def loadword(word_display, word, soundpath):
     #Try to play dict_download if single word
     if " " not in word_display: #For single word
         ind_word = download_dict_sound.remove_symbols_lower(word_display)
-        if ind_word not in set_of_words:
-            try:#download
-                download_dict_sound.download(ind_word,dict_sounds_path)
-                download_dict_sound.convert_mp3_to_wav(os.path.join(dict_sounds_path,ind_word + ".mp3"))
-                os.remove(os.path.join(dict_sounds_path,ind_word + ".mp3"))
-                dict_sound_files = os.listdir(os.path.abspath(dict_sounds_path))
-                set_of_words = set([os.path.splitext(f)[0] for f in dict_sound_files])
-            except:
-                print "OOPS, dowload didn't work."
         try: #Load word wav file
             wordsound = pg.mixer.music.load(os.path.join(dict_sounds_path,ind_word + ".wav"))
             print "Using Dictionary Sound"
@@ -251,6 +243,7 @@ def loadword(word_display, word, soundpath):
                 wordsound = pg.mixer.music.load(download_dict_sound.get_macsay(word_display, word))
             else:
                 print "Using google speech"
+                print os.path.join(soundpath,word+"speech_google.wav")
                 wordsound = pg.mixer.music.load(os.path.join(soundpath,word+"speech_google.wav"))
     else: #For multiple words
         if sys.platform == "darwin":
