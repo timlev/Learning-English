@@ -55,7 +55,7 @@ try:
     from pygame.locals import *
     import pygame._view
 except:
-    print "RosettaTable depends on the pygame module. Please install pygame."
+    print "Learning-English depends on the pygame module. Please install pygame."
 
 
 #start the show
@@ -103,7 +103,7 @@ screen.fill(background_colour)
 size = screen.get_size()
 w = size[0]
 h = size[1]
-pg.display.set_caption("RosettaTablet")
+pg.display.set_caption("Learning-English")
 font = os.path.join("include","DidactGothic.ttf")
 myfont = pg.font.Font(font, 50)
 mysmallfont = pg.font.Font(font, 40)
@@ -484,7 +484,7 @@ def drawlessonstructure():
     size = screen.get_size()
     w = size[0]
     h = size[1]
-    pg.display.set_caption("RosettaTablet")
+    pg.display.set_caption("Learning-English")
     myfont = pg.font.Font(font, 50)
     mymedfont = pg.font.Font(font, 30)
     mysmallfont = pg.font.Font(font, 40)
@@ -910,13 +910,13 @@ def unitmenu():
     size = screen.get_size()
     w = size[0]
     h = size[1]
-    pg.display.set_caption("RosettaTablet")
+    pg.display.set_caption("Learning-English")
     myfont = pg.font.Font(font, 50)#formerly SysFont
     mysmallfont = pg.font.Font(font, 40)
     global unit
     uniton = True
     screen.fill(background_colour)
-    listoffolders = [f for f in listdir(os.path.abspath("Units")) if isfile(os.path.join(os.path.abspath("Units"),f)) == False and f not in ["examplelesson","exampleunit","Test","RosettaTablet.app", ".git", "sounds", "extras"]]
+    listoffolders = [f for f in listdir(os.path.abspath("Units")) if isfile(os.path.join(os.path.abspath("Units"),f)) == False and f not in ["examplelesson","exampleunit","Test","Learning-English.app", ".git", "sounds", "extras"]]
     listoffolderlables = [screen.blit(mysmallfont.render(str(listoffolders.index(folder)+1)+". "+folder.title(), 1, black),[20,45*listoffolders.index(folder)]) for folder in listoffolders]
     drawquitbutton()
     pg.display.flip()
@@ -948,7 +948,7 @@ def spell(lesson):
     size = screen.get_size()
     w = size[0]
     h = size[1]
-    pg.display.set_caption("RosettaTablet")
+    pg.display.set_caption("Learning-English")
     soundpic = pg.image.load(os.path.join("icons",'sound.png'))
     soundbutton = screen.blit(soundpic, (0,0))
     drawmenubutton()
@@ -1132,7 +1132,7 @@ def lessonmenu(unit):
     size = screen.get_size()
     w = size[0]
     h = size[1]
-    pg.display.set_caption("RosettaTablet")
+    pg.display.set_caption("Learning-English")
     myfont = pg.font.Font(font, 50)
     mysmallfont = pg.font.Font(font, 40)
     global lesson
